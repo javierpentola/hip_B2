@@ -265,28 +265,28 @@ $_SESSION['last_activity'] = time();
     <nav class="sidebar">
         <div class="brand">HIP ENERGY</div>
         <div class="nav-items">
-            <a href="home.html" class="nav-item active">
+            <a href="home.php" class="nav-item active">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
-            <a href="consumo.html" class="nav-item">
+            <a href="consumo.php" class="nav-item">
                 <i class="fas fa-chart-line"></i>
                 <span>Consumption</span>
             </a>
-            <a href="facturas.html" class="nav-item">
+            <a href="facturas.php" class="nav-item">
                 <i class="fas fa-file-invoice-dollar"></i>
                 <span>Bills</span>
             </a>
-            <a href="notificaciones.html" class="nav-item">
+            <a href="notificaciones.php" class="nav-item">
                 <i class="fas fa-bell"></i>
                 <span>Notifications</span>
                 <div class="notification-badge">4</div>
             </a>
-            <a href="citas.html" class="nav-item">
+            <a href="citas.php" class="nav-item">
                 <i class="fas fa-calendar-alt"></i>
                 <span>Appointments</span>
             </a>
-            <a href="modoaccesible.html" class="nav-item">
+            <a href="modoaccesible.php" class="nav-item">
                 <i class="fas fa-exclamation-triangle"></i>
                 <span>Fault Reporting</span>
             </a>

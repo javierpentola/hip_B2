@@ -402,17 +402,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <nav class="sidebar">
         <div class="brand">HIP ENERGY</div>
         <div class="nav-items">
-            <a href="index.html" class="nav-item">
+            <a href="index.php" class="nav-item">
                 <i class="fas fa-sign-in-alt"></i>
                 <span>Login</span>
             </a>
-            <a href="register.html" class="nav-item active">
+            <a href="register.php" class="nav-item active">
                 <i class="fas fa-user-plus"></i>
                 <span>Register</span>
             </a>
-            <a href="recover_password.html" class="nav-item">
+            <a href="recover_password.php" class="nav-item">
                 <i class="fas fa-key"></i>
                 <span>Recover Password</span>
+            </a>
+            <a href="admin_login.php" class="nav-item">
+                <i class="fas fa-home"></i>
+               <span>Admin dashboard</span>
             </a>
         </div>
         <div class="vision-modes">
@@ -452,7 +456,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <?php 
     // Make sure that $accountID is defined and safe to display
     echo "Congratulations! Your account has been successfully created. Your account number is: <strong>" . htmlspecialchars($accountID) . "</strong>. 
-          You can now <a href='index.html'>log in</a> and enjoy our services."; 
+          You can now <a href='index.php'>log in</a> and enjoy our services."; 
 ?>
 
             </div>

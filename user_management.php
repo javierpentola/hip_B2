@@ -238,35 +238,27 @@
     <nav class="sidebar">
         <div class="brand">HIP ENERGY</div>
         <div class="nav-items">
-            <a href="#" class="nav-item">
+            <a href="dashboard.php" class="nav-item">
                 <i class="fas fa-tachometer-alt"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="#" class="nav-item active">
+            <a href="user_management.php" class="nav-item active">
                 <i class="fas fa-users"></i>
                 <span>User Management</span>
             </a>
-            <a href="#" class="nav-item">
-                <i class="fas fa-file-invoice-dollar"></i>
-                <span>Invoices & Expenses</span>
-            </a>
-            <a href="#" class="nav-item">
+            <a href="reports.php" class="nav-item">
                 <i class="fas fa-chart-bar"></i>
                 <span>Reports</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="security.php" class="nav-item">
                 <i class="fas fa-shield-alt"></i>
                 <span>Security</span>
             </a>
-            <a href="#" class="nav-item">
-                <i class="fas fa-headset"></i>
-                <span>Support</span>
-            </a>
-            <a href="#" class="nav-item">
+            <a href="system_settings.php" class="nav-item">
                 <i class="fas fa-cog"></i>
                 <span>System Settings</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="monitoring.php" class="nav-item">
                 <i class="fas fa-desktop"></i>
                 <span>Monitoring</span>
             </a>
@@ -291,6 +283,7 @@
                         <th>Consumption</th>
                         <th>Balance</th>
                         <th>Actions</th>
+                        <th>Adress</th>
                     </tr>
                 </thead>
                 <tbody id="userTableBody">
@@ -312,7 +305,19 @@
         </div>
     </main>
 
-    <button class="logout-btn" onclick="logout()">Admin log out</button>
+<button class="logout-btn" onclick="logout()">Admin log out</button>
+
+<script>
+    function logout() {
+        // Aquí se implementaría la lógica para cerrar sesión
+        alert("Sesión cerrada");
+
+        // Redirigir al index.php
+        window.location.href = 'index.php';
+    }
+</script>
+
+
 
     <script>
         // Sample user data
@@ -381,11 +386,6 @@
                 // Here you would typically implement password reset logic
                 console.log('Resetting password for user:', user);
             }
-        }
-
-        function logout() {
-            // Implement logout logic here
-            alert("Admin logged out");
         }
 
         // Initialize the user table

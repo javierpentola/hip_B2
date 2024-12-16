@@ -1,3 +1,65 @@
+<?php
+// Datos de conexión a la base de datos en InfinityFree
+$host = 'sql108.infinityfree.com'; // mysql host name
+$user = 'if0_37852817';           // mysql username
+$pass = 'BkgzaebxbJ';             // mysql password
+$db   = 'if0_37852817_hipgeneraldb'; // mysql database
+
+// Inicializar variables para mensajes
+$error = '';
+
+// Si el formulario fue enviado
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Recibir los datos del formulario
+    $email = trim($_POST['email']);         // Limpiar posibles espacios
+    $userPassword = trim($_POST['password']); // Limpiar posibles espacios
+
+    if (empty($email) || empty($userPassword)) {
+        $error = "Por favor, completa todos los campos.";
+    } else {
+        try {
+            // Establecer conexión con la base de datos usando PDO
+            $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            
+            // Verificar si el usuario existe en la base de datos
+            $stmt = $pdo->prepare("SELECT * FROM Customer WHERE Email = :email");
+            $stmt->execute(['email' => $email]);
+            
+            // Si se encuentra el usuario
+            if ($stmt->rowCount() > 0) {
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+                // Verificar la contraseña usando password_verify
+                if (password_verify($userPassword, $user['Password'])) {
+                    // Redirigir al dashboard.php después del inicio de sesión exitoso
+                    header('Location: dashboard.php');
+                    exit();  // Asegúrate de que después de la redirección, el script no continúe ejecutándose
+                } else {
+                    $error = "Contraseña incorrecta.";
+                }
+            } else {
+                $error = "El email no está registrado.";
+            }
+        } catch (PDOException $e) {
+            $error = "Error de conexión: " . $e->getMessage();
+        }
+    }
+}
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -22,6 +84,7 @@
             margin: 0;
             font-family: 'Rubik', sans-serif;
             overflow-x: hidden;
+            background-color: var(--primary-color);
         }
 
         .accessible-mode {
@@ -111,20 +174,6 @@
             opacity: 1;
         }
 
-        .notification-badge {
-            background-color: #ff4444;
-            color: white;
-            border-radius: 50%;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
-            margin-left: auto;
-        }
-
-        .accessible-mode .notification-badge {
-            background-color: #ffffff;
-            color: #000000;
-        }
-
         .logo-container {
             padding: 1rem;
             margin: 1rem;
@@ -183,70 +232,60 @@
             margin-top: auto;
         }
 
-        .notifications-dashboard {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .notification-card {
-            background-color: rgba(255, 255, 255, 0.9);
+        .form-container {
+            background-color: white;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 1rem;
-            display: flex;
-            align-items: flex-start;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            padding: 2rem;
+            max-width: 400px;
+            margin: 0 auto;
         }
 
-        .notification-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        .form-group {
+            margin-bottom: 1rem;
         }
 
-        .notification-icon {
-            font-size: 1.5rem;
-            margin-right: 1rem;
-            color: var(--accent-color);
-        }
-
-        .notification-content {
-            flex: 1;
-        }
-
-        .notification-title {
-            font-weight: bold;
+        .form-group label {
+            display: block;
             margin-bottom: 0.5rem;
+            font-weight: 500;
         }
 
-        .notification-message {
-            color: #666;
-            font-size: 0.9rem;
+        .form-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
 
-        .notification-time {
-            font-size: 0.8rem;
-            color: #999;
-            margin-top: 0.5rem;
-        }
-
-        .notification-actions {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 0.5rem;
-        }
-
-        .notification-action {
-            background: none;
+        .submit-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #f3c517;
+            color: yellow;
             border: none;
-            color: var(--accent-color);
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 0.9rem;
-            margin-left: 1rem;
-            padding: 0;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
         }
 
-        .notification-action:hover {
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .recover-password {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .recover-password a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .recover-password a:hover {
             text-decoration: underline;
         }
 
@@ -264,34 +303,50 @@
     </style>
 </head>
 <body>
+
+<script>
+    (function() {
+        let timeout;
+        const redirectUrl = 'index.php';
+        const timeoutDuration = 5 * 60 * 1000; // 5 minutos en milisegundos
+
+        // Reiniciar el temporizador
+        function resetTimer() {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, timeoutDuration);
+        }
+
+        // Eventos que reinician el temporizador
+        window.onload = resetTimer;
+        document.onmousemove = resetTimer;
+        document.onkeydown = resetTimer;
+        document.onclick = resetTimer;
+        document.onscroll = resetTimer;
+    })();
+</script>
+
     <nav class="sidebar">
         <div class="brand">HIP ENERGY</div>
         <div class="nav-items">
-            <a href="home.php" class="nav-item">
+            <a href="index.php" class="nav-item">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Login</span>
+            </a>
+            <a href="register.php" class="nav-item">
+                <i class="fas fa-user-plus"></i>
+                <span>Register</span>
+            </a>
+            <a href="recover_password.php" class="nav-item">
+                <i class="fas fa-key"></i>
+                <span>Recover Password</span>
+            </a>
+            <a href="admin_login.php" class="nav-item active">
                 <i class="fas fa-home"></i>
-                <span>Home</span>
+               <span>Admin dashboard</span>
             </a>
-            <a href="consumo.php" class="nav-item">
-                <i class="fas fa-chart-line"></i>
-                <span>Consumption</span>
-            </a>
-            <a href="facturas.php" class="nav-item">
-                <i class="fas fa-file-invoice-dollar"></i>
-                <span>Bills</span>
-            </a>
-            <a href="notificaciones.php" class="nav-item active">
-                <i class="fas fa-bell"></i>
-                <span>Notifications</span>
-                <div class="notification-badge">4</div>
-            </a>
-            <a href="citas.php" class="nav-item">
-                <i class="fas fa-calendar-alt"></i>
-                <span>Appointments</span>
-            </a>
-            <a href="modoaccesible.php" class="nav-item">
-                <i class="fas fa-exclamation-triangle"></i>
-                <span>Fault Reporting</span>
-            </a>
+
         </div>
         <div class="vision-modes">
             <a href="#" class="nav-item" id="protanopiaToggle">
@@ -316,67 +371,40 @@
         </div>
     </nav>
 
-    <main class="main-content">
-        <h1>Notifications Dashboard</h1>
-        <div class="notifications-dashboard">
-            <div class="notification-card">
-                <div class="notification-icon">
-                    <i class="fas fa-exclamation-circle"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">High Energy Usage Alert</div>
-                    <div class="notification-message">Your energy consumption is 20% higher than usual. Check your appliances to save energy.</div>
-                    <div class="notification-time">2 hours ago</div>
-                    <div class="notification-actions">
-                        <button class="notification-action">View Details</button>
-                        <button class="notification-action">Dismiss</button>
-                    </div>
-                </div>
+<main class="main-content">
+    <h1>Login</h1>
+    <div class="form-container">
+        <form action="admin_login.php" method="POST">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
             </div>
-            <div class="notification-card">
-                <div class="notification-icon">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">New Bill Available</div>
-                    <div class="notification-message">Your May 2023 energy bill is now available. Total amount: $145.20</div>
-                    <div class="notification-time">1 day ago</div>
-                    <div class="notification-actions">
-                        <button class="notification-action">View Bill</button>
-                        <button class="notification-action">Pay Now</button>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
             </div>
-            <div class="notification-card">
-                <div class="notification-icon">
-                    <i class="fas fa-calendar-check"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">Maintenance Appointment Reminder</div>
-                    <div class="notification-message">Don't forget your scheduled maintenance appointment tomorrow at 2:00 PM.</div>
-                    <div class="notification-time">2 days ago</div>
-                    <div class="notification-actions">
-                        <button class="notification-action">Confirm</button>
-                        <button class="notification-action">Reschedule</button>
-                    </div>
-                </div>
-            </div>
-            <div class="notification-card">
-                <div class="notification-icon">
-                    <i class="fas fa-lightbulb"></i>
-                </div>
-                <div class="notification-content">
-                    <div class="notification-title">Energy Saving Tip</div>
-                    <div class="notification-message">Replace your old light bulbs with LED bulbs to save up to 75% on lighting costs.</div>
-                    <div class="notification-time">3 days ago</div>
-                    <div class="notification-actions">
-                        <button class="notification-action">Learn More</button>
-                        <button class="notification-action">Dismiss</button>
-                    </div>
-                </div>
-            </div>
+            <button type="submit" class="submit-btn">Login</button>
+        </form>
+        <div class="recover-password">
+            <a href="#">Recover password</a>
         </div>
-    </main>
+    </div>
+</main>
+
+
+
+<style>
+    .recover-password a {
+        color: #f3c517;  /* Color amarillo deseado */
+        text-decoration: none;  /* Elimina el subrayado */
+        transition: color 0.3s ease;  /* Transición suave cuando cambia el color */
+    }
+
+    .recover-password a:hover {
+        color: #d4a017;  /* Color cuando se pase el ratón por encima (puedes elegir otro) */
+    }
+</style>
+
 
     <svg style="display: none;">
         <defs>

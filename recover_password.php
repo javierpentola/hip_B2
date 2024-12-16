@@ -1,3 +1,28 @@
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST['email'];
+    
+    // Asunto del correo
+    $subject = "Reset Password";
+
+    // Cuerpo del mensaje
+    $message = "test";
+
+    // Cabeceras del correo
+    $headers = "From: no-reply@tudominio.com" . "\r\n" .
+               "Reply-To: no-reply@tudominio.com" . "\r\n" .
+               "X-Mailer: PHP/" . phpversion();
+
+    // Enviar el correo
+    if (mail($email, $subject, $message, $headers)) {
+        echo "El correo de recuperación de contraseña ha sido enviado.";
+    } else {
+        echo "Error al enviar el correo.";
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -243,17 +268,21 @@
         <div class="brand">HIP ENERGY</div>
         <div class="nav-items">
         <div class="nav-items">
-            <a href="index.html" class="nav-item">
+            <a href="index.php" class="nav-item">
                 <i class="fas fa-sign-in-alt"></i>
                 <span>Login</span>
             </a>
-            <a href="register.html" class="nav-item">
+            <a href="register.php" class="nav-item">
                 <i class="fas fa-user-plus"></i>
                 <span>Register</span>
             </a>
-            <a href="recover_password.html" class="nav-item active">
+            <a href="recover_password.php" class="nav-item active">
                 <i class="fas fa-key"></i>
                 <span>Recover Password</span>
+            </a>
+            <a href="admin_login.php" class="nav-item">
+                <i class="fas fa-home"></i>
+               <span>Admin dashboard</span>
             </a>
         </div>
         <div class="vision-modes">
@@ -282,13 +311,16 @@
 <main class="main-content">
     <h1>Recover Password</h1>
     <div class="form-container">
-        <form id="recoverPasswordForm">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <button type="submit" class="submit-btn">Reset Password</button>
-        </form>
+
+<form id="recoverPasswordForm" method="POST" action="recover_password.php">
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+    <button type="submit" class="submit-btn">Reset Password</button>
+</form>
+
+
         <div class="form-info">
             Enter your email address and we'll send you instructions to reset your password.
         </div>

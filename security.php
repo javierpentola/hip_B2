@@ -271,38 +271,30 @@
 <nav class="sidebar">
     <div class="brand">HIP ENERGY</div>
     <div class="nav-items">
-        <a href="#" class="nav-item">
-            <i class="fas fa-tachometer-alt"></i>
-            <span>Dashboard</span>
-        </a>
-        <a href="#" class="nav-item">
-            <i class="fas fa-users"></i>
-            <span>User Management</span>
-        </a>
-        <a href="#" class="nav-item">
-            <i class="fas fa-file-invoice-dollar"></i>
-            <span>Invoices & Expenses</span>
-        </a>
-        <a href="#" class="nav-item">
-            <i class="fas fa-chart-bar"></i>
-            <span>Reports</span>
-        </a>
-        <a href="#" class="nav-item active">
-            <i class="fas fa-shield-alt"></i>
-            <span>Security</span>
-        </a>
-        <a href="#" class="nav-item">
-            <i class="fas fa-headset"></i>
-            <span>Support</span>
-        </a>
-        <a href="#" class="nav-item">
-            <i class="fas fa-cog"></i>
-            <span>System Settings</span>
-        </a>
-        <a href="#" class="nav-item">
-            <i class="fas fa-desktop"></i>
-            <span>Monitoring</span>
-        </a>
+            <a href="dashboard.php" class="nav-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="user_management.php" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>User Management</span>
+            </a>
+            <a href="reports.php" class="nav-item">
+                <i class="fas fa-chart-bar"></i>
+                <span>Reports</span>
+            </a>
+            <a href="security.php" class="nav-item active">
+                <i class="fas fa-shield-alt"></i>
+                <span>Security</span>
+            </a>
+            <a href="system_settings.php" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>System Settings</span>
+            </a>
+            <a href="monitoring.php" class="nav-item">
+                <i class="fas fa-desktop"></i>
+                <span>Monitoring</span>
+            </a>
     </div>
     <div class="logo-container">
         <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Normal-S0ZM46xhJ8Mm0vNUqKXmmqWS9gTvZJ.png" alt="HIP ENERGY Logo" class="logo">
@@ -345,6 +337,16 @@
 </main>
 
 <button class="logout-btn" onclick="logout()">Admin log out</button>
+
+<script>
+    function logout() {
+        // Aquí se implementaría la lógica para cerrar sesión
+        alert("Sesión cerrada");
+
+        // Redirigir al index.php
+        window.location.href = 'index.php';
+    }
+</script>
 
 <script>
     // Sample data for admins
@@ -457,11 +459,6 @@
         console.log(`Bloqueando IP: ${ip}`);
         alert(`IP ${ip} ha sido bloqueada.`);
         // Aquí iría la lógica real para bloquear la IP
-    }
-
-    function logout() {
-        // Implementar lógica de cierre de sesión aquí
-        alert("Admin ha cerrado sesión");
     }
 
     // Inicializar la página
